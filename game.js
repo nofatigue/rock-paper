@@ -33,9 +33,6 @@ function playRound(playChoice, computerChoice)
     if (!WinRulesMap[playChoice])
         return 'bad input';
 
-    
-    
-
     if (playChoice === computerChoice)
     {
         return 'tie';
@@ -48,7 +45,66 @@ function playRound(playChoice, computerChoice)
 
 }
 
-let userInput = prompt("Rock, paper or scissors?");
-let computerChoice = getComputerChoice();
+/**
+ * 
+ * Main game logic. Play a series of rounds against the computer.
+ * 
+ * @returns {string} A message declaring the result of the game.
+ */
+function game()
+{
+    const roundNumber = 3;
 
-console.log(playRound(userInput, computerChoice));
+    let playerWins = 0;
+    let computerWins = 0;
+
+    let lastRoundResultMsg = "";
+    
+    for (let i = 0; i < roundNumber; i++)
+    {
+        let userInput = prompt(lastRoundResultMsg + " Rock, paper or scissors?");
+        let computerChoice = getComputerChoice();
+        
+        const roundResult = playRound(userInput, computerChoice);
+
+        switch (roundResult)
+        {
+            default:
+                lastRoundResultMsg = "Bad input!";
+
+                i--;
+                continue;
+
+            case 'tie':
+                lastRoundResultMsg = "TIE!";
+                // add another round;
+                i--;
+                continue;
+
+            case 'win':
+                playerWins++;
+                lastRoundResultMsg = "WIN!";
+                break;
+            
+            case 'lose':
+                computerWins++;
+                lastRoundResultMsg = "LOSE!";
+                break;
+
+            
+        }
+
+        
+    }
+    
+    let gameResult = "Unknown";
+    if (playerWins > computerWins) gameResult = "You've won!";
+    else if (playerWins < computerWins) gameResult = "You've lost!";
+    else if (playerWins == computerWins) gameResult = "A TIE??";
+
+    return gameResult;
+}
+
+gameResult = game();
+
+alert(gameResult);
