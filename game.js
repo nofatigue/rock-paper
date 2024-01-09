@@ -1,3 +1,4 @@
+
 /**
  * 
  * @returns {string} One of ['Rock', 'Paper', 'Scissors']
@@ -13,16 +14,22 @@ function getComputerChoice()
 
 }
 
+let playerWins = 0;
+let computerWins = 0;
+let roundStarted = true;
 /**
  * 
  * @param {string} playChoice - the choice of the player out of ['Rock', 'Paper', 'Scissors']
- * @param {string} computerChoice - the choice of the computer, out of ['Rock', 'Paper', 'Scissors']
  */
-function playRound(playChoice, computerChoice)
+function playRound(playChoice)
 {
+    if (!roundStarted) {
+        return;
+    }
+
     // normalize input values
     playChoice = playChoice.toLowerCase();
-    computerChoice = computerChoice.toLowerCase();
+    computerChoice = getComputerChoice().toLowerCase();
 
     WinRulesMap = {
         'rock': 'scissors',
@@ -35,76 +42,79 @@ function playRound(playChoice, computerChoice)
 
     if (playChoice === computerChoice)
     {
-        return 'tie';
+        updateResultDiv("Round has ended with a tie!");
     }
 
-    if (WinRulesMap[playChoice] == computerChoice)
-        return 'win';
-    else 
-        return 'lose';
+    if (WinRulesMap[playChoice] == computerChoice) {
+        playerWins++;
+        updateResultDiv("You have won the round!");
+    }
+    else {
+        computerWins++;
+        updateResultDiv("You have lost the round!");
+    }
+    
+    if (playerWins == 5) {
+        updateResultDiv("You have won the game!");
+        endRound();
+    }
+
+    if (computerWins == 5) {
+        updateResultDiv("You have LOST the game!");
+        endRound();
+    }
+
+    updateScores(playerWins, computerWins);
+    updateChoices(playChoice, computerChoice);
 
 }
 
-/**
- * 
- * Main game logic. Play a series of rounds against the computer.
- * 
- * @returns {string} A message declaring the result of the game.
- */
-function game()
-{
-    const roundNumber = 3;
-
-    let playerWins = 0;
-    let computerWins = 0;
-
-    let lastRoundResultMsg = "";
-    
-    for (let i = 0; i < roundNumber; i++)
-    {
-        let userInput = prompt(lastRoundResultMsg + " Rock, paper or scissors?");
-        let computerChoice = getComputerChoice();
-        
-        const roundResult = playRound(userInput, computerChoice);
-
-        switch (roundResult)
-        {
-            default:
-                lastRoundResultMsg = "Bad input!";
-
-                i--;
-                continue;
-
-            case 'tie':
-                lastRoundResultMsg = "TIE!";
-                // add another round;
-                i--;
-                continue;
-
-            case 'win':
-                playerWins++;
-                lastRoundResultMsg = "WIN!";
-                break;
-            
-            case 'lose':
-                computerWins++;
-                lastRoundResultMsg = "LOSE!";
-                break;
-
-            
-        }
-
-        
-    }
-    
-    let gameResult = "Unknown";
-    if (playerWins > computerWins) gameResult = "You've won!";
-    else if (playerWins < computerWins) gameResult = "You've lost!";
-    else if (playerWins == computerWins) gameResult = "A TIE??";
-
-    return gameResult;
+function updateResultDiv(text) {
+    resultDiv = document.querySelector("#result");
+    resultDiv.textContent = text;
 }
 
-gameResult = game();
+function updateScores(playerScore, computerScore) {
+    playerScoreElement = document.querySelector("#playerScore");
+    playerScoreElement.textContent = playerScore;
+    
+    computerScoreElement = document.querySelector("#computerScore");
+    computerScoreElement.textContent = computerScore;
+}
 
-alert(gameResult);
+function updateChoices(playerChoice, computerChoice) {
+    playerChoiceElement = document.querySelector("#playerChoice");
+    playerChoiceElement.textContent = playerChoice;
+    
+    computerChoiceElement = document.querySelector("#computerChoice");
+    computerChoiceElement.textContent = computerChoice;
+}
+
+function initNewRound() {
+    updateScores(0, 0);
+    updateChoices(" - ", " - ");
+    updateResultDiv("Rock, Paper or Scissors?");
+
+    buttons = document.querySelectorAll("#buttons button")
+    buttons.forEach(button => {
+        button.disabled = false;
+    });
+    playerWins = 0;
+    computerWins = 0;
+}
+
+function endRound() {
+    buttons = document.querySelectorAll("#buttons button")
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+}
+
+buttons = document.querySelectorAll("#buttons button")
+buttons.forEach(element => {
+    element.addEventListener("click", () => playRound(element.textContent))
+});
+
+newRoundButton = document.querySelector("#newRound");
+newRoundButton.addEventListener("click", () => initNewRound());
+initNewRound();
