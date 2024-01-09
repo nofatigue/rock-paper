@@ -1,0 +1,29 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#gameForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: aquamarine;
+}
+
+#scores {
+    display: flex;
+    gap: 1em;
+}
+
+#choices {
+    display: flex;
+    gap: 1em;
+}
+
+#buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+}

@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <title> Rock Paper Scissors </title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <div id="gameForm">
+        <div id="result">Click a button!</div>
+        <div id="scores">
+            <p>Player Score: </p><p id="playerScore"></p>
+            <p>Computer Score: </p><p id="computerScore"></p>
+        </div>
+        <div id="choices">
+            <p>Player Choice: </p><p id="playerChoice"></p>
+            <p>Computer Choice: </p><p id="computerChoice"></p>
+        </div>
+        <div id="buttons">
+            <button id="rockButton">Rock</button>
+            <button id="paperButton">Paper</button>
+            <button id="scissorsButton">Scissors</button>
+        </div>
+        <button id="newRound">New Round</button>
+    </div>
     <script src="game.js"></script>
 </body>
 </html>
